@@ -3,6 +3,11 @@
 
 package flump.export {
 
+import aspire.util.Log;
+import aspire.util.Set;
+import aspire.util.Sets;
+import aspire.util.StringUtil;
+
 import flash.display.StageQuality;
 import flash.filesystem.File;
 
@@ -10,11 +15,6 @@ import flump.mold.AtlasMold;
 import flump.mold.optional;
 import flump.mold.require;
 import flump.xfl.XflLibrary;
-
-import com.threerings.util.Log;
-import com.threerings.util.Set;
-import com.threerings.util.Sets;
-import com.threerings.util.StringUtil;
 
 public class ExportConf
 {
@@ -31,16 +31,17 @@ public class ExportConf
     /** Additional scaleFactors to output */
     public var additionalScaleFactors :Array = [];
     /** The optimization strategy. */
-    public var optimize :String = OPTIMIZE_MEMORY;
+    public var optimize :String = OPTIMIZE_SPEED;
     /** The stage quality setting (StageQuality). */
     public var quality :String = StageQuality.BEST;
+    /** Whether or not to pretty print the library. */
+    public var prettyPrint :Boolean = false;
 
     public function get scaleFactorsString () :String {
         return this.additionalScaleFactors.join(",");
     }
 
     public function set scaleFactorsString (str :String) :void {
-        var strings :Array = str.split(",");
         var values :Set = Sets.newSetOf(int);
         for each (var num :String in str.split(",")) {
             try {
@@ -76,6 +77,7 @@ public class ExportConf
         conf.additionalScaleFactors = optional(o, "additionalScaleFactors", []);
         conf.optimize = optional(o, "optimize", OPTIMIZE_MEMORY);
         conf.quality = optional(o, "quality", StageQuality.BEST);
+        conf.prettyPrint = optional(o, "prettyPrint", false);
         return conf;
     }
 
